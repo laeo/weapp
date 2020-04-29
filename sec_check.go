@@ -32,6 +32,26 @@ func imgSecCheck(api, token, filename string) (*CommonError, error) {
 	return res, nil
 }
 
+func IMGSecCheck2(token, url string) (*CommonError, error) {
+	api := baseURL + apiIMGSecCheck
+	return imgSecCheck2(api, url, token)
+}
+
+func imgSecCheck2(api, token, fileURL string) (*CommonError, error) {
+
+	url, err := tokenAPI(api, token)
+	if err != nil {
+		return nil, err
+	}
+
+	res := new(CommonError)
+	if err := postFormByFileURL(url, "media", fileURL, res); err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
 // MSGSecCheck 文本检测
 // 官方文档: https://developers.weixin.qq.com/miniprogram/dev/api/msgSecCheck.html
 //

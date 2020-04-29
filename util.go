@@ -1,6 +1,7 @@
 package weapp
 
 import (
+	"bufio"
 	"bytes"
 	"encoding/json"
 	"io"
@@ -99,6 +100,19 @@ func postFormByFile(url, field, filename string, response interface{}) error {
 	defer file.Close()
 
 	return postForm(url, field, filename, file, response)
+}
+
+func postFormByFileURL(url, field, fileURL string, response interface{}) error {
+	// Add your media file
+	res, err := http.Get(fileURL)
+	if err != nil {
+		return err
+	}
+	defer res.Body.Close()
+	// 获得get请求响应的reader对象
+	reader := bufio.NewReaderSize(res.Body, 32*1024)
+
+	return postForm(url, field, fileURL, reader, response)
 }
 
 func postForm(url, field, filename string, reader io.Reader, response interface{}) error {
